@@ -32,12 +32,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>({
-    id: '1',
-    name: 'Super Admin',
-    email: 'admin@saas.com',
-    role: 'super_admin'
-  });
+  const [user, setUser] = useState<User | null>(null);
 
   const [tenants, setTenants] = useState<Tenant[]>([
     { id: '1', name: 'Downtown Hotel', type: 'hotel', owner: 'John Smith', active: true },
@@ -51,11 +46,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Mock login - in real app, this would authenticate with backend
     if (email === 'admin@saas.com') {
       setUser({ id: '1', name: 'Super Admin', email, role: 'super_admin' });
+      setCurrentTenant(tenants[0]);
     } else if (email === 'owner@hotel.com') {
       setUser({ id: '2', name: 'Hotel Owner', email, role: 'owner', tenantId: '1' });
       setCurrentTenant(tenants[0]);
     } else if (email === 'cashier@hotel.com') {
       setUser({ id: '3', name: 'Hotel Cashier', email, role: 'cashier', tenantId: '1' });
+      setCurrentTenant(tenants[0]);
+    } else if (email === 'inventory@hotel.com') {
+      setUser({ id: '4', name: 'Inventory Manager', email, role: 'inventory_manager', tenantId: '1' });
       setCurrentTenant(tenants[0]);
     }
   };
